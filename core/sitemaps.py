@@ -14,6 +14,10 @@ class PageSitemap(Sitemap):
     def location(self, obj):
         if obj.slug == 'home':
             return '/'
+        # Category pages at /slug/, articles at /slug.html — mirrors Joomla structure
+        from .models import Page
+        if Page.objects.filter(category=obj.slug, is_published=True).exists():
+            return f'/{obj.slug}/'
         return f'/{obj.slug}.html'
 
     def lastmod(self, obj):

@@ -21,21 +21,24 @@ def robots_txt(request):
     return HttpResponse(content, content_type='text/plain')
 
 
-# Slug aliases: old slug → canonical slug (both redirect to canonical .html URL)
+# Old slug aliases → canonical slug. view_html/view_slash handle the /slug/ vs /slug.html split.
 _LEGACY = {
     'contact':  'attestatsiya-rabochikh-mest-s-kompyuterom-pevm',
     'articles': 'attestatsiya-rabochikh-mest-po-professiyam',
     'docs':     'obraztsy-dokumentov-po-attestatsii-rabochikh-mest',
-    'contacts': 'kontakty',  # Joomla canonical was /kontakty.html
+    'contacts': 'kontakty',
 }
 
 
 def _legacy_redirect(request, slug=''):
-    """Handles /slug.html requests: redirect legacy slugs, serve canonical ones."""
+    """Handles /slug.html: legacy aliases get 301, canonical articles are served."""
     from django.http import HttpResponsePermanentRedirect
+    from core.models import Page
     target = _LEGACY.get(slug)
     if target:
-        return HttpResponsePermanentRedirect(f'/{target}.html')
+        is_cat = Page.objects.filter(category=target, is_published=True).exists()
+        url = f'/{target}/' if is_cat else f'/{target}.html'
+        return HttpResponsePermanentRedirect(url)
     return views.page_view_html(request, slug=slug)
 
 
@@ -45,6 +48,7 @@ urlpatterns = [
     path('robots.txt', robots_txt),
     path('contact-form/', contact_form, name='contact_form'),
     path('', views.page_view, {'slug': 'home'}, name='home'),
-    # URLs match old Joomla site exactly: /slug.html
-    path('<path:slug>.html', _legacy_redirect, name='page'),
+    # Joomla URL format: categories at /slug/, articles at /slug.html
+    path('<path:slug>.html', _legacy_redirect, name='page_html'),
+    path('<slug:slug>/', views.page_view_slash, name='page_slash'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

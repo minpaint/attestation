@@ -52,10 +52,26 @@ def page_view(request, slug=''):
     return render(request, 'core/page.html', _page_ctx(request, page))
 
 
-def page_view_html(request, slug=''):
-    """Serve old Joomla .html URLs without redirect — same page, same status."""
+def page_view_slash(request, slug=''):
+    """Category pages live at /slug/ — like Joomla category blog view.
+    Articles accessed via /slug/ get 301 → /slug.html."""
+    from django.http import HttpResponsePermanentRedirect
     page = get_object_or_404(Page, slug=slug, is_published=True)
-    return render(request, 'core/page.html', _page_ctx(request, page))
+    ctx = _page_ctx(request, page)
+    if not ctx.get('child_pages'):
+        return HttpResponsePermanentRedirect(f'/{slug}.html')
+    return render(request, 'core/page.html', ctx)
+
+
+def page_view_html(request, slug=''):
+    """Article pages live at /slug.html — like Joomla article view.
+    Categories accessed via /slug.html get 301 → /slug/."""
+    from django.http import HttpResponsePermanentRedirect
+    page = get_object_or_404(Page, slug=slug, is_published=True)
+    ctx = _page_ctx(request, page)
+    if ctx.get('child_pages'):
+        return HttpResponsePermanentRedirect(f'/{slug}/')
+    return render(request, 'core/page.html', ctx)
 
 
 @csrf_exempt

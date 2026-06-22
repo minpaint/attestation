@@ -1,0 +1,24 @@
+[Unit]
+Description=Gunicorn service for attestation.by
+After=network.target
+
+[Service]
+Type=simple
+User=django
+Group=django
+WorkingDirectory=/home/django/webapps/attestation/web
+EnvironmentFile=/home/django/webapps/attestation/.env
+ExecStart=/home/django/webapps/attestation/venv/bin/gunicorn \
+    --workers ${GUNICORN_WORKERS:-3} \
+    --bind ${GUNICORN_BIND:-127.0.0.1:8022} \
+    --timeout ${GUNICORN_TIMEOUT:-120} \
+    --log-level ${GUNICORN_LOG_LEVEL:-info} \
+    --access-logfile /home/django/webapps/attestation/logs/gunicorn.access.log \
+    --error-logfile /home/django/webapps/attestation/logs/gunicorn.error.log \
+    --pid /home/django/webapps/attestation/run/gunicorn.pid \
+    web.wsgi:application
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

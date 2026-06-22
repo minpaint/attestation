@@ -16,6 +16,17 @@ web/static/uploads-pasted.png
 .env
 .env.*
 !.env.example
+deploy/cwp/.env
+
+# Logs / runtime
+*.log
+logs/
+run/
+
+# Virtual environment
+venv/
+.venv/
+env/
 
 # Database dumps
 *.sql

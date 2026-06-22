@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ page.meta_title|default:"Аттестация рабочих мест в Минске" }}{% endblock %}</title>
+<meta name="description" content="{% block description %}{{ page.meta_description|default:"Профессиональная аттестация рабочих мест, производственный контроль, лабораторные замеры. Минск, Беларусь." }}{% endblock %}">
+<link rel="canonical" href="https://attestation.by/{% if page.slug and page.slug != 'home' %}{{ page.slug }}/{% endif %}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Аттестация рабочих мест — Минск">
+<meta property="og:locale" content="ru_BY">
+<meta property="og:title" content="{{ page.meta_title|default:'Аттестация рабочих мест в Минске' }}">
+<meta property="og:description" content="{{ page.meta_description|default:'Профессиональная аттестация рабочих мест, производственный контроль, лабораторные замеры. Минск, Беларусь.' }}">
+<meta property="og:url" content="https://attestation.by/{% if page.slug and page.slug != 'home' %}{{ page.slug }}/{% endif %}">
+<meta property="og:image" content="https://attestation.by/static/og-cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Manrope',sans-serif;background:#eef1f7;display:flex;flex-direction:column;min-height:100vh;}
+main{flex:1;}
+.navlink:hover{color:#ff6a13 !important;}
+.ddlink:hover{color:#ff6a13 !important;}
+.flink:hover{color:#ff8a44 !important;}
+.dropwrap{animation:ddin .16s ease;}
+@keyframes ddin{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── Global responsive overrides ───────────────────────────── */
+img{max-width:100%;}
+
+/* Tables: horizontal scroll wrapper */
+.ptab{width:100%;border-collapse:collapse;font:400 14px/1.5 'Manrope';}
+.ptab th,.ptab td{padding:10px 14px;border:1px solid #e6ebf5;text-align:left;vertical-align:top;}
+.ptab thead{background:#f5f8ff;}
+
+/* Article prose */
+.doctext ul,.doctext ol{padding-left:22px;margin:10px 0 16px;}
+.doctext li{margin-bottom:6px;font:400 15px/1.6 'Manrope';color:#4a526b;}
+.doctext p{margin-bottom:14px;font:400 15px/1.7 'Manrope';color:#4a526b;}
+
+/* Card hover */
+.lift{transition:transform .15s,box-shadow .15s;}
+.lift:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(12,23,51,.1)!important;}
+.doc{transition:border-color .12s,box-shadow .12s;}
+.doc:hover{border-color:#ff6a13!important;box-shadow:0 4px 16px rgba(255,106,19,.1)!important;}
+.btnA{transition:opacity .15s;}
+.btnA:hover{opacity:.88;}
+
+/* ── Always-on helpers ── */
+img { max-width: 100%; }
+.ptab { width:100%; border-collapse:collapse; font:400 14px/1.5 'Manrope'; }
+.ptab th,.ptab td { padding:10px 14px; border:1px solid #e6ebf5; text-align:left; vertical-align:top; }
+.ptab thead { background:#f5f8ff; }
+.doctext ul,.doctext ol { padding-left:22px; margin:10px 0 16px; }
+.doctext li { margin-bottom:6px; font:400 15px/1.6 'Manrope'; color:#4a526b; }
+.doctext p { margin-bottom:14px; font:400 15px/1.7 'Manrope'; color:#4a526b; }
+.lift { transition:transform .15s,box-shadow .15s; }
+.lift:hover { transform:translateY(-3px); box-shadow:0 8px 28px rgba(12,23,51,.1)!important; }
+.doc { transition:border-color .12s,box-shadow .12s; }
+.doc:hover { border-color:#ff6a13!important; box-shadow:0 4px 16px rgba(255,106,19,.1)!important; }
+.btnA { transition:opacity .15s; }
+.btnA:hover { opacity:.88; }
+
+/* overflow-x on tables */
+.doctext [style*="overflow-x:auto"] { overflow-x:auto; }
+.doctext table { min-width:520px; font-size:13px!important; }
+</style>
+
+<script>
+(function(){
+  var BP = 768; /* mobile breakpoint px */
+
+  function isMobile(){ return window.innerWidth <= BP; }
+
+  /* Extract numeric px value from padding/margin string like "48px 48px 44px" */
+  function parseSides(val){
+    /* returns [top, right, bottom, left] in px */
+    var parts = val.trim().split(/\s+/);
+    var n = parts.map(function(p){ return parseFloat(p)||0; });
+    if(n.length===1) return [n[0],n[0],n[0],n[0]];
+    if(n.length===2) return [n[0],n[1],n[0],n[1]];
+    if(n.length===3) return [n[0],n[1],n[2],n[1]];
+    return [n[0],n[1],n[2],n[3]];
+  }
+
+  function applyEl(el){
+    var st = el.getAttribute('style')||'';
+    var tag = el.tagName.toLowerCase();
+
+    /* ── 1. Grids → single column ── */
+    var gridMatch = st.match(/grid-template-columns\s*:\s*([^;]+)/);
+    if(gridMatch){
+      var gcols = gridMatch[1].trim();
+      /* stats strip: 4-col dark bg → 2 col */
+      if(/repeat\(4/.test(gcols) && /background\s*:\s*#0c1733/.test(st)){
+        el.style.gridTemplateColumns = '1fr 1fr';
+        el.style.gap = '0';
+        Array.from(el.children).forEach(function(ch, i){
+          ch.style.padding = '20px 12px';
+          ch.style.borderRight = 'none';
+          ch.style.borderBottom = '1px solid #24345f';
+          if(i%2===0) ch.style.borderRight = '1px solid #24345f';
+        });
+      }
+      /* doc cards 4-col → 2 col */
+      else if(/repeat\(4/.test(gcols)){
+        el.style.gridTemplateColumns = '1fr 1fr';
+      }
+      /* all other multi-col → 1 col */
+      else if(/repeat\([23]/.test(gcols) || /\d+fr\s+[\d.]+fr/.test(gcols)
+           || /minmax/.test(gcols) || /\d+px/.test(gcols)){
+        el.style.gridTemplateColumns = '1fr';
+      }
+    }
+
+    /* ── 2. Section/div padding: replace 48px sides with 16px ── */
+    var padMatch = st.match(/(?:^|;)\s*padding\s*:\s*([^;]+)/);
+    if(padMatch){
+      var sides = parseSides(padMatch[1]);
+      /* if horizontal padding is large (≥32px), shrink it */
+      if(sides[1] >= 32 || sides[3] >= 32){
+        var vTop = Math.min(sides[0], 36);
+        var vBot = Math.min(sides[2], 36);
+        el.style.padding = vTop+'px 16px '+vBot+'px';
+      }
+    }
+
+    /* ── 3. Section margin with large sides → shrink ── */
+    var marMatch = st.match(/(?:^|;)\s*margin\s*:\s*([^;]+)/);
+    if(marMatch){
+      var ms = parseSides(marMatch[1]);
+      if(ms[1] >= 32 || ms[3] >= 32){
+        el.style.margin = '0 16px '+(ms[2]||32)+'px';
+      }
+    }
+
+    /* ── 4. CTA flex rows → column (skip FAQ toggles & nav-like rows) ── */
+    if(/justify-content\s*:\s*space-between/.test(st) && /display\s*:\s*flex/.test(st)){
+      /* Skip FAQ accordion trigger buttons */
+      var onclk = el.getAttribute('onclick')||'';
+      var isFaqBtn = onclk.indexOf('faqToggle') !== -1;
+      /* Skip elements that are flex-direction:row by intent and narrow enough */
+      var isNarrowRow = el.offsetWidth <= 60;
+      if(!isFaqBtn && !isNarrowRow){
+        el.style.flexDirection = 'column';
+        el.style.alignItems = 'flex-start';
+        el.style.gap = '16px';
+      }
+    }
+
+    /* ── 5. Headings ── */
+    if(tag==='h1'){
+      var fMatch = st.match(/font\s*:\s*800\s+(\d+)px/);
+      if(fMatch && parseInt(fMatch[1])>=32){
+        el.style.fontSize = '24px';
+        el.style.lineHeight = '1.2';
+      }
+    }
+    if(tag==='h2'){
+      var fMatch2 = st.match(/font\s*:\s*800\s+(\d+)px/);
+      if(fMatch2 && parseInt(fMatch2[1])>=24){
+        el.style.fontSize = '20px';
+      }
+    }
+
+    /* ── 6. Aside sticky → static ── */
+    if(tag==='aside' && /position\s*:\s*sticky/.test(st)){
+      el.style.position = 'static';
+    }
+
+    /* ── 7. Images with fixed large height ── */
+    if(tag==='img'){
+      var hMatch = st.match(/height\s*:\s*(\d+)px/);
+      if(hMatch && parseInt(hMatch[1])>220){
+        el.style.height = '200px';
+      }
+    }
+
+    /* ── 8. doctext indented paragraphs ── */
+    if(/margin-left\s*:\s*\d+px/.test(st) && el.closest && el.closest('.doctext')){
+      el.style.marginLeft = '0';
+    }
+
+    /* ── 9. Document card padding ── */
+    if(/border-left\s*:\s*4px solid #ff6a13/.test(st)){
+      el.style.padding = '20px 16px';
+    }
+
+    /* ── 10. Two-col sidebar layout: if element has grid 200px 1fr → stack ── */
+    /* already handled by rule 1 for grids with px values */
+
+    /* ── 11. Large font on spans inside hero ── */
+    if(tag==='span'){
+      var fSpan = st.match(/font-size\s*:\s*(\d+)px/);
+      if(fSpan && parseInt(fSpan[1]) >= 20){
+        el.style.fontSize = Math.min(parseInt(fSpan[1]), 16) + 'px';
+      }
+    }
+  }
+
+  function restoreEl(el){
+    var orig = el.dataset.mobileOrig;
+    if(orig !== undefined){
+      el.setAttribute('style', orig);
+      delete el.dataset.mobileOrig;
+    }
+  }
+
+  function apply(){
+    document.querySelectorAll('main *').forEach(function(el){
+      /* save original style once */
+      if(el.dataset.mobileOrig === undefined){
+        el.dataset.mobileOrig = el.getAttribute('style')||'';
+      }
+      applyEl(el);
+    });
+  }
+
+  function restore(){
+    document.querySelectorAll('main *').forEach(restoreEl);
+  }
+
+  function run(){
+    if(isMobile()) apply(); else restore();
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+
+  var lastWidth = window.innerWidth;
+  window.addEventListener('resize', function(){
+    if(window.innerWidth === lastWidth) return;
+    lastWidth = window.innerWidth;
+    run();
+  });
+})();
+</script>
+{% block extra_head %}{% endblock %}
+<script>
+function faqToggle(el){
+  var a=el.nextElementSibling;
+  var s=el.querySelector('.faqSign');
+  if(!a)return;
+  var open=a.style.display==='block';
+  a.style.display=open?'none':'block';
+  if(s)s.textContent=open?'+':'−';
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": ["LocalBusiness", "ProfessionalService"],
+      "@id": "https://attestation.by/#organization",
+      "name": "Аттестация рабочих мест",
+      "url": "https://attestation.by/",
+      "telephone": "+375-29-XXX-XX-XX",
+      "email": "info@attestation.by",
+      "description": "Профессиональная аттестация рабочих мест по условиям труда, производственный контроль, лабораторные измерения вредных факторов в Минске и Беларуси.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Минск",
+        "addressCountry": "BY"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Беларусь"
+      },
+      "priceRange": "$$",
+      "openingHours": "Mo-Fr 09:00-18:00",
+      "sameAs": []
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://attestation.by/{% if page.slug and page.slug != 'home' %}{{ page.slug }}/{% endif %}#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Главная",
+          "item": "https://attestation.by/"
+        }{% if page.slug and page.slug != 'home' %},
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "{{ page.meta_title|default:page.title }}",
+          "item": "https://attestation.by/{{ page.slug }}/"
+        }{% endif %}
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+{% include "partials/header.html" %}
+
+<main>
+{% block content %}{% endblock %}
+</main>
+
+{% include "partials/footer.html" %}
+
+</body>
+</html>

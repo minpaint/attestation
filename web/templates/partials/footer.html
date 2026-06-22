@@ -1,0 +1,61 @@
+<style>
+@media(max-width:768px){
+  #site-footer{padding:36px 20px 24px!important;}
+  #footer-grid{grid-template-columns:1fr 1fr!important;gap:24px!important;}
+}
+@media(max-width:480px){
+  #footer-grid{grid-template-columns:1fr!important;}
+}
+</style>
+<footer id="site-footer" style="font-family:'Manrope',sans-serif;background:#0c1733;color:#9aa6c4;padding:54px 48px 28px;">
+  <div id="footer-grid" style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px;padding-bottom:36px;border-bottom:1px solid #24345f;">
+
+    <!-- COMPANY -->
+    <div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <div style="width:42px;height:42px;border-radius:9px;background:#ff6a13;display:flex;align-items:center;justify-content:center;color:#fff;font:800 18px/1 'Manrope';">{{ site.logo_letter }}</div>
+        <div style="font:800 16px/1.1 'Manrope';color:#fff;">{{ site.logo_name }}</div>
+      </div>
+      <p style="font:600 14px/1.5 'Manrope';color:#c7d0e6;margin:0 0 16px;">{{ site.tagline }}</p>
+      <div style="font:500 14px/1.9 'Manrope';">
+        {{ site.phone }} (vel)<br>
+        {{ site.phone_mts }} (mts)<br>
+        {{ site.email }}
+      </div>
+    </div>
+
+    <!-- О КОМПАНИИ -->
+    <div>
+      <div style="font:800 14px/1 'Manrope';color:#fff;margin-bottom:16px;">О компании</div>
+      <div style="display:flex;flex-direction:column;gap:10px;font:500 14px/1.3 'Manrope';">
+        <a href="/about/" class="flink" style="color:#9aa6c4;text-decoration:none;">О нас</a>
+        <a href="/about/" class="flink" style="color:#9aa6c4;text-decoration:none;">Наши сертификаты</a>
+        <a href="/about/" class="flink" style="color:#9aa6c4;text-decoration:none;">Наша лаборатория</a>
+        <a href="/attestatsiya-rabochikh-mest-po-usloviyam-truda-v-minske-tseny-stoimost-odnogo-rabochego-mesta/" class="flink" style="color:#9aa6c4;text-decoration:none;">Стоимость услуг</a>
+      </div>
+    </div>
+
+    <!-- УСЛУГИ -->
+    <div>
+      <div style="font:800 14px/1 'Manrope';color:#fff;margin-bottom:16px;">Наши услуги</div>
+      <div style="display:flex;flex-direction:column;gap:10px;font:500 14px/1.3 'Manrope';">
+        <a href="/" class="flink" style="color:#9aa6c4;text-decoration:none;">Проведение АРМ</a>
+        <a href="/proizvodstvennyj-kontrol-v-minske-i-belarusi-zamery-vrednykh-faktorov-v-ramkakh-laboratornogo-kontrolya/" class="flink" style="color:#9aa6c4;text-decoration:none;">Лабораторные замеры</a>
+        <a href="/proizvodstvennyj-kontrol-v-minske-i-belarusi-zamery-vrednykh-faktorov-v-ramkakh-laboratornogo-kontrolya/" class="flink" style="color:#9aa6c4;text-decoration:none;">Производственный контроль</a>
+        <a href="/docs/" class="flink" style="color:#9aa6c4;text-decoration:none;">Оформление документации</a>
+      </div>
+    </div>
+
+    <!-- ПАРТНЁРЫ -->
+    <div>
+      <div style="font:800 14px/1 'Manrope';color:#fff;margin-bottom:16px;">Наши партнёры</div>
+      <div style="display:flex;flex-direction:column;gap:10px;font:500 14px/1.3 'Manrope';">
+        {% for partner in site.partnerlink_set.all %}
+        <a href="{{ partner.url }}" class="flink" style="color:#9aa6c4;text-decoration:none;">{{ partner.title }}</a>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+  <div style="padding-top:24px;font:500 13px/1.5 'Manrope';color:#6f7b9c;">{{ site.copyright }}</div>
+</footer>

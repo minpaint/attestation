@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.meta_title|default:page.title }}{% endblock %}
+{% block description %}{{ page.meta_description }}{% endblock %}
+
+{% block content %}
+<div style="font-family:'Manrope',sans-serif;background:#fff;max-width:1280px;margin:0 auto;box-shadow:0 0 60px rgba(12,23,51,.08);">
+  {{ page.content|safe }}
+</div>
+{% endblock %}

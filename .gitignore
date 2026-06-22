@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+
+# Django
+web/db.sqlite3
+web/staticfiles/
+web/media/
+web/static/uploads-pasted.png
+
+# Secrets & env
+.env
+.env.*
+!.env.example
+
+# Database dumps
+*.sql
+*.dump
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Design mockups (development artefacts, not needed on server)
+design/
+
+# Claude / Codex agent metadata (local only)
+.agents/
+.claude/
+.codex/
+
+# Root-level orphaned app copy (Django app lives in web/core/)
+/core/

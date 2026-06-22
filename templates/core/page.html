@@ -33,7 +33,7 @@
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;">
       {% for item in child_pages %}
-      <a href="/{{ item.page.slug }}/" style="display:flex;flex-direction:column;background:#f5f8ff;border:1px solid #e6ebf5;border-top:3px solid #ff6a13;border-radius:14px;padding:22px 24px;text-decoration:none;transition:box-shadow .15s,transform .15s;" onmouseover="this.style.boxShadow='0 8px 32px rgba(12,23,51,.12)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
+      <a href="/{{ item.page.slug }}.html" style="display:flex;flex-direction:column;background:#f5f8ff;border:1px solid #e6ebf5;border-top:3px solid #ff6a13;border-radius:14px;padding:22px 24px;text-decoration:none;transition:box-shadow .15s,transform .15s;" onmouseover="this.style.boxShadow='0 8px 32px rgba(12,23,51,.12)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
         <div style="font:700 15px/1.35 'Manrope';color:#16285a;margin-bottom:10px;">{{ item.page.title }}</div>
         {% if item.summary %}
         <div style="font:400 13px/1.6 'Manrope';color:#5a6282;flex:1;margin-bottom:14px;">{{ item.summary }}</div>

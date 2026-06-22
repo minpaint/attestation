@@ -14,7 +14,7 @@ class PageSitemap(Sitemap):
     def location(self, obj):
         if obj.slug == 'home':
             return '/'
-        return f'/{obj.slug}/'
+        return f'/{obj.slug}.html'
 
     def lastmod(self, obj):
         return obj.updated_at

@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=django
 Group=django
-WorkingDirectory=/home/django/webapps/attestation/web
+WorkingDirectory=/home/django/webapps/attestation
 EnvironmentFile=/home/django/webapps/attestation/.env
 ExecStart=/home/django/webapps/attestation/venv/bin/gunicorn \
     --workers ${GUNICORN_WORKERS:-3} \

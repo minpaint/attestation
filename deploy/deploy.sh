@@ -9,7 +9,6 @@ set -euo pipefail
 APP_DIR="/home/django/webapps/attestation"
 VENV="$APP_DIR/venv"
 ENV_FILE="$APP_DIR/.env"
-DJANGO_DIR="$APP_DIR/web"
 
 cd "$APP_DIR"
 
@@ -21,8 +20,6 @@ fi
 echo "==> Устанавливаем/обновляем зависимости..."
 "$VENV/bin/pip" install -q --upgrade pip
 "$VENV/bin/pip" install -q -r requirements.txt
-
-cd "$DJANGO_DIR"
 
 echo "==> Применяем миграции..."
 "$VENV/bin/python" manage.py migrate --noinput

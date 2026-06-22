@@ -7,10 +7,10 @@ __pycache__/
 .eggs/
 
 # Django
-web/db.sqlite3
-web/staticfiles/
-web/media/
-web/static/uploads-pasted.png
+db.sqlite3
+staticfiles/
+media/
+static/uploads-pasted.png
 
 # Secrets & env
 .env
@@ -47,6 +47,3 @@ design/
 .agents/
 .claude/
 .codex/
-
-# Root-level orphaned app copy (Django app lives in web/core/)
-/core/

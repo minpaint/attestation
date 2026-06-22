@@ -18,8 +18,7 @@ if [[ -f "$ENV_FILE" ]]; then
   set +a
 fi
 
-# manage.py находится в web/, туда же смотрит gunicorn
-cd "$APP_DIR/web"
+cd "$APP_DIR"
 
 exec "$VENV_DIR/bin/gunicorn" \
   --name attestation \

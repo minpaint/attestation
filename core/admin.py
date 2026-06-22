@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from ckeditor.widgets import CKEditorWidget
 from .models import SiteSettings, PartnerLink, MenuItem, MegaMenuColumn, MegaMenuLink, Page
 
 
@@ -88,8 +89,26 @@ class MenuItemAdmin(admin.ModelAdmin):
 
 # ─── PAGES ───────────────────────────────────────────────────────────────────
 
+class PageAdminForm(admin.ModelAdmin.__bases__[0] if False else object):
+    pass
+
+import django.forms as forms
+
+class PageForm(forms.ModelForm):
+    content = forms.CharField(
+        label='Контент',
+        widget=CKEditorWidget(),
+        required=False,
+    )
+
+    class Meta:
+        model = Page
+        fields = '__all__'
+
+
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
+    form = PageForm
     list_display = ['title', 'slug_link', 'active_key', 'is_published', 'updated_at']
     list_display_links = ['title']
     list_filter = ['is_published', 'active_key']

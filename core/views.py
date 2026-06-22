@@ -17,17 +17,25 @@ def _client_ip(request):
     return request.META.get('REMOTE_ADDR', '') or 'unknown'
 
 
+def _page_ctx(request, page):
+    ctx = {'page': page}
+    if request.user.is_staff:
+        from django.urls import reverse
+        ctx['admin_edit_url'] = reverse('admin:core_page_change', args=[page.pk])
+    return ctx
+
+
 def page_view(request, slug=''):
     if not slug:
         slug = 'home'
     page = get_object_or_404(Page, slug=slug, is_published=True)
-    return render(request, 'core/page.html', {'page': page})
+    return render(request, 'core/page.html', _page_ctx(request, page))
 
 
 def page_view_html(request, slug=''):
     """Serve old Joomla .html URLs without redirect — same page, same status."""
     page = get_object_or_404(Page, slug=slug, is_published=True)
-    return render(request, 'core/page.html', {'page': page})
+    return render(request, 'core/page.html', _page_ctx(request, page))
 
 
 @csrf_exempt

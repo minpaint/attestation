@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
+    'ckeditor',
     'core',
 ]
 
@@ -132,6 +133,34 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
+}
+
+# ── CKEditor ─────────────────────────────────────────────────────────────────
+CKEDITOR_CONFIGS = {
+    'default': {
+        'language': 'ru',
+        'skin': 'moono-lisa',
+        'toolbar': 'full',
+        'toolbar_full': [
+            ['Source', '-', 'Undo', 'Redo'],
+            ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Table', 'HorizontalRule', 'SpecialChar'],
+            ['Styles', 'Format', 'Font', 'FontSize'],
+            ['TextColor', 'BGColor'],
+            ['Maximize', 'ShowBlocks'],
+        ],
+        'height': 600,
+        'width': '100%',
+        'removePlugins': 'elementspath',
+        'extraPlugins': 'autogrow',
+        'autoGrow_onStartup': True,
+        'autoGrow_minHeight': 400,
+        'allowedContent': True,  # не фильтровать HTML — у нас сложные inline-стили
+        'extraAllowedContent': '*(*);*{*}',
+    },
 }
 
 # ── HTTPS / security hardening (production only) ──────────────────────────────

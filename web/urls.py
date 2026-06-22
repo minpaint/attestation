@@ -39,20 +39,12 @@ def _legacy_redirect(request, slug=''):
     return views.page_view_html(request, slug=slug)
 
 
-def _slug_to_html(request, slug=''):
-    """301 redirect /slug/ → /slug.html  (canonical format matches old Joomla site)."""
-    from django.http import HttpResponsePermanentRedirect
-    return HttpResponsePermanentRedirect(f'/{slug}.html')
-
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', robots_txt),
     path('contact-form/', contact_form, name='contact_form'),
     path('', views.page_view, {'slug': 'home'}, name='home'),
-    # Canonical URL format: /slug.html  (matches old Joomla site)
-    path('<path:slug>.html', _legacy_redirect, name='page_html'),
-    # Legacy /slug/ → 301 → /slug.html
-    path('<path:slug>/', _slug_to_html, name='page'),
+    # URLs match old Joomla site exactly: /slug.html
+    path('<path:slug>.html', _legacy_redirect, name='page'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

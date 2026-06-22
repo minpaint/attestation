@@ -24,6 +24,16 @@ echo "==> Устанавливаем/обновляем зависимости..
 echo "==> Применяем миграции..."
 "$VENV/bin/python" manage.py migrate --noinput
 
+# Загружаем начальные данные, если страниц ещё нет
+PAGE_COUNT=$("$VENV/bin/python" manage.py shell -c \
+  "from core.models import Page; print(Page.objects.count())" 2>/dev/null || echo 0)
+if [[ "$PAGE_COUNT" -eq 0 ]]; then
+  echo "==> Загружаем страницы из фикстуры (первый деплой)..."
+  "$VENV/bin/python" manage.py loaddata core/fixtures/pages.json
+else
+  echo "==> БД уже содержит $PAGE_COUNT страниц — пропускаем loaddata."
+fi
+
 echo "==> Собираем статику..."
 "$VENV/bin/python" manage.py collectstatic --noinput --clear
 

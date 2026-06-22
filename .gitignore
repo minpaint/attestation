@@ -47,3 +47,12 @@ design/
 .agents/
 .claude/
 .codex/
+
+# Local one-off dev scripts (not part of the project)
+parse_joomla_urls.py
+extract_articles.py
+find_typos.py
+check_slugs.py
+dump_pages.py
+extracted_articles.json
+*_out.txt

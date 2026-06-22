@@ -130,6 +130,11 @@ class Page(models.Model):
                             help_text='Часть URL после домена, без слэшей. Например: contacts или obrazets-prikaza-o-provedenii-...')
     active_key = models.SlugField('Ключ меню', max_length=50, blank=True,
                                   help_text='Ключ активности для подсветки пункта меню (напр. «docs», «about»)')
+    category = models.SlugField('Категория', max_length=100, blank=True, db_index=True,
+                                help_text='Slug категории-агрегатора, которой принадлежит страница (напр. «articles», «docs»). '
+                                          'Оставьте пустым, если страница не входит в категорию.')
+    summary = models.TextField('Анонс', blank=True,
+                               help_text='Короткий текст для карточки на странице категории. Если пусто — берётся первый абзац контента.')
     meta_title = models.CharField('SEO-заголовок', max_length=300, blank=True)
     meta_description = models.TextField('SEO-описание', blank=True)
     content = models.TextField('Контент (HTML)', blank=True)

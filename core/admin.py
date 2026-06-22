@@ -109,14 +109,19 @@ class PageForm(forms.ModelForm):
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
     form = PageForm
-    list_display = ['title', 'slug_link', 'active_key', 'is_published', 'updated_at']
+    list_display = ['title', 'slug_link', 'category', 'active_key', 'is_published', 'updated_at']
     list_display_links = ['title']
-    list_filter = ['is_published', 'active_key']
-    search_fields = ['title', 'slug', 'meta_title']
+    list_filter = ['is_published', 'category', 'active_key']
+    search_fields = ['title', 'slug', 'meta_title', 'summary']
     readonly_fields = ['updated_at', 'slug_preview']
     fieldsets = [
         (None, {
             'fields': ['title', 'slug', 'slug_preview', 'active_key', 'is_published'],
+        }),
+        ('Категория и анонс', {
+            'fields': ['category', 'summary'],
+            'description': 'Укажите категорию, чтобы страница появилась как карточка на странице-агрегаторе. '
+                           'Анонс — короткий текст для карточки (если пусто, берётся первый абзац).',
         }),
         ('SEO', {
             'fields': ['meta_title', 'meta_description'],

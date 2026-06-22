@@ -24,6 +24,8 @@ def robots_txt(request):
 # Old Joomla aliases that differed from article slugs — 301 redirects
 _LEGACY = {
     'contact': 'attestatsiya-rabochikh-mest-s-kompyuterom-pevm',
+    'articles': 'attestatsiya-rabochikh-mest-po-professiyam',
+    'docs': 'obraztsy-dokumentov-po-attestatsii-rabochikh-mest',
 }
 
 

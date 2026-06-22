@@ -17,11 +17,31 @@ def _client_ip(request):
     return request.META.get('REMOTE_ADDR', '') or 'unknown'
 
 
+def _extract_summary(content):
+    """Вытаскивает первый непустой абзац из HTML-контента."""
+    import re
+    for m in re.finditer(r'<p[^>]*>(.*?)</p>', content, re.DOTALL):
+        text = re.sub(r'<[^>]+>', '', m.group(1)).strip()
+        if len(text) > 40:
+            return text[:220] + ('…' if len(text) > 220 else '')
+    return ''
+
+
 def _page_ctx(request, page):
     ctx = {'page': page}
     if request.user.is_staff:
         from django.urls import reverse
         ctx['admin_edit_url'] = reverse('admin:core_page_change', args=[page.pk])
+    # Если страница является агрегатором — загружаем дочерние страницы
+    children = Page.objects.filter(category=page.slug, is_published=True).order_by('title')
+    if children.exists():
+        child_list = []
+        for ch in children:
+            child_list.append({
+                'page': ch,
+                'summary': ch.summary or _extract_summary(ch.content),
+            })
+        ctx['child_pages'] = child_list
     return ctx
 
 
